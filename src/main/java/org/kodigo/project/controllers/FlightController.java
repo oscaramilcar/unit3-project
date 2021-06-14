@@ -21,7 +21,7 @@ public class FlightController {
         flightRepository.save(serialize);
     }
 
-    public void importData(){
+    public void importData() throws IOException {
         flightRepository.importData();
     }
 }

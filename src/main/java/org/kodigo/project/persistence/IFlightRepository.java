@@ -7,5 +7,5 @@ import java.io.IOException;
 public interface IFlightRepository {
     void findAll() throws IOException;
     void save(Flight flight) throws IOException;
-    void importData();
+    void importData() throws IOException;
 }

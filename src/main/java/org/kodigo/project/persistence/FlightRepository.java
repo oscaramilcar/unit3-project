@@ -72,7 +72,61 @@ public class FlightRepository implements IFlightRepository {
     }
 
     @Override
-    public void importData() {
+    public void importData() throws IOException{
+        //Where the data is going to be extracted
+        String importPath = "importFlights.xlsx";
+        FileInputStream importFile = new FileInputStream(importPath);
+        Workbook importWorkbook = new XSSFWorkbook(importFile); //create new workbook
+        DataFormatter formatter = new DataFormatter(); //Formatter values cells
+        Iterator<Sheet> sheets = importWorkbook.sheetIterator();
+        List<String> data = new ArrayList<>();
+        while (sheets.hasNext()) {
+            Sheet sh = sheets.next();
+            Iterator<Row> RowIterator = sh.iterator(); // Iterate the rows on the sheet
+            while (RowIterator.hasNext()) {
+                Row row = RowIterator.next(); //Current row
+                Iterator<Cell> cellIterator = row.iterator(); //cells in row
+                while (cellIterator.hasNext()) {
+                    Cell cell = cellIterator.next(); //Current cell
+                    String cellValue = formatter.formatCellValue(cell);
+                    data.add(cellValue);
+                }
+            }
+            importWorkbook.close();
+        }
 
+        //the data is going to ve saved
+        String path = "data/Flights.xlsx";
+        Workbook workbook = new XSSFWorkbook(path);
+        Sheet sheet = workbook.getSheetAt(0);
+
+        int lastRow = sheet.getLastRowNum();
+        int rowNum = ++lastRow;
+        int count = 0;
+        Row row = null;
+        //It starts on 8 because the first 8 values are the header
+        for (int i = 8; i < data.size(); i++){ //I used this way to loop the list because i used a List<String> not save object of Flight
+            //This is in order to set it into as a integer value
+            //This for create a new row
+            if (count == 0){
+                row = sheet.createRow(rowNum++);
+                row.createCell(count).setCellValue(Integer.parseInt(data.get(i)));
+            }
+            else {
+                row.createCell(count).setCellValue(data.get(i));
+            }
+            count++;
+
+            //if statement for reset the value in create a new row
+            if (count > 7){
+                count = 0;
+            }
+        }
+
+        FileOutputStream fo= new FileOutputStream("Flights.xlsx");
+        workbook.write(fo);
+        fo.close();
+        workbook.close();
+        System.out.println("Complete!!");
     }
 }
