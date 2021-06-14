@@ -14,7 +14,11 @@ public class Flight {
     private String airline;
     private String typeAircraft;
     private String source;
+    private String destination;
     private String date;
     private String departureTime;
     private String arrivalTime;
+    //private Aircraft aircraft;
+    //private String status;
+    //private String comments;
 }
