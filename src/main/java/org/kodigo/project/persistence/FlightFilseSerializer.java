@@ -10,8 +10,6 @@ public class FlightFilseSerializer implements IFlightFileSerializer{
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("************ Flight record ************");
-        System.out.println("No. Flight: ");
-        flight.setNoFlight(Integer.parseInt(scanner.nextLine()));
         System.out.println("Airline: ");
         flight.setAirline(scanner.nextLine());
         System.out.println("Type aircraft: ");
@@ -21,11 +19,14 @@ public class FlightFilseSerializer implements IFlightFileSerializer{
         System.out.println("Destination: ");
         flight.setDestination(scanner.nextLine());
         System.out.println("Date: ");
-        flight.setDate(scanner.nextLine());
+        flight.setDate(String.format("%t", scanner.nextLine()));
         System.out.println("Departure time: ");
         flight.setDepartureTime(scanner.nextLine());
-        System.out.println("Arrival time");
+        System.out.println("Arrival time: ");
         flight.setArrivalTime(scanner.nextLine());
+        System.out.println("Status flight: ");
+        flight.setStatus(scanner.nextLine());
+        flight.setComments("No comments yet");
 
         return flight;
     }

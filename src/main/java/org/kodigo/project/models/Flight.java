@@ -19,6 +19,6 @@ public class Flight {
     private String departureTime;
     private String arrivalTime;
     //private Aircraft aircraft;
-    //private String status;
-    //private String comments;
+    private String status;
+    private String comments;
 }

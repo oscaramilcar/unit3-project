@@ -6,6 +6,7 @@ import org.kodigo.project.persistence.IFlightFileSerializer;
 import org.kodigo.project.persistence.IFlightRepository;
 
 import java.io.IOException;
+import java.util.List;
 
 @AllArgsConstructor
 public class FlightController {
@@ -23,5 +24,13 @@ public class FlightController {
 
     public void importData() throws IOException {
         flightRepository.importData();
+    }
+
+    public List<Flight> getFlight(int nFlight) throws IOException {
+        return flightRepository.findSpecific(nFlight);
+    }
+
+    public void updateFlight(Flight flight) throws IOException {
+        flightRepository.updateFlight(flight);
     }
 }
