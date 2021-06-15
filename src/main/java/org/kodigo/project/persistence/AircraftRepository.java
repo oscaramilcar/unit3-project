@@ -30,7 +30,7 @@ public class AircraftRepository implements IAircraftRepository {
             while (RowIterator.hasNext()) {
                 Row row = RowIterator.next(); //Current row
                 Iterator<Cell> cellIterator = row.iterator(); //cells in row
-                System.out.println("+-------------------------------------------------------------------------------------------------------------------------------------------------------+");
+                System.out.println("+-----------------------------------------------------------------------+");
                 while (cellIterator.hasNext()) {
                     Cell cell = cellIterator.next(); //Current cell
                     String cellValue = formatter.formatCellValue(cell);
@@ -38,7 +38,7 @@ public class AircraftRepository implements IAircraftRepository {
                 }
                 System.out.println("|");
             }
-            System.out.println("+-------------------------------------------------------------------------------------------------------------------------------------------------------+");
+            System.out.println("+-----------------------------------------------------------------------+");
             workbook.close();
         }
     }

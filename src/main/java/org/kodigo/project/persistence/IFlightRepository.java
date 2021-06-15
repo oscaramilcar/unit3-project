@@ -8,4 +8,5 @@ public interface IFlightRepository {
     void findAll() throws IOException;
     void save(Flight flight) throws IOException;
     void importData() throws IOException;
+    Flight find(int number) throws IOException;
 }

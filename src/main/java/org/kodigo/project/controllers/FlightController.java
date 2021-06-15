@@ -1,6 +1,7 @@
 package org.kodigo.project.controllers;
 
 import lombok.AllArgsConstructor;
+import org.kodigo.project.Documents.IExportableExcel;
 import org.kodigo.project.models.Flight;
 import org.kodigo.project.persistence.IFlightFileSerializer;
 import org.kodigo.project.persistence.IFlightRepository;
@@ -23,5 +24,9 @@ public class FlightController {
 
     public void importData() throws IOException {
         flightRepository.importData();
+    }
+
+    public Flight getFlight(int number) throws IOException {
+        return flightRepository.find(number);
     }
 }

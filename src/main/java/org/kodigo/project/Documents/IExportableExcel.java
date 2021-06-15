@@ -1,5 +1,5 @@
 package org.kodigo.project.Documents;
 
-public interface ExportableExcel {
+public interface IExportableExcel {
     void toExcel();
 }

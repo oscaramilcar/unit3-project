@@ -129,4 +129,32 @@ public class FlightRepository implements IFlightRepository {
         workbook.close();
         System.out.println("Complete!!");
     }
+
+    @Override
+    public Flight find(int number) throws IOException {
+        String path = "Flights.xlsx";
+        FileInputStream file = new FileInputStream(path);
+        Workbook workbook = new XSSFWorkbook(file); //create new workbook
+        Sheet spreadsheet = workbook.getSheetAt(0);
+        Iterator<Row> rowIterator = spreadsheet.iterator();
+
+        DataFormatter dataFormatter = new DataFormatter();
+
+        rowIterator.next();
+        while (rowIterator.hasNext()){
+            Row row = rowIterator.next();
+            if(number == row.getCell(0).getNumericCellValue()){
+                return new Flight(
+                        (int)row.getCell(0).getNumericCellValue(),
+                        row.getCell(1).getStringCellValue(),
+                        row.getCell(2).getStringCellValue(),
+                        row.getCell(3).getStringCellValue(),
+                        row.getCell(4).getStringCellValue(),
+                        dataFormatter.formatCellValue(row.getCell(5)),
+                        dataFormatter.formatCellValue(row.getCell(6)),
+                        dataFormatter.formatCellValue(row.getCell(7)));
+            }
+        }
+        return null;
+    }
 }
