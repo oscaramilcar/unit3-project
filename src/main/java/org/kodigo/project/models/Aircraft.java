@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Aircraft {
+    private int nAircraft;
     private String model;
     private int passengerCapacity;
     private int fuelTanksFull;

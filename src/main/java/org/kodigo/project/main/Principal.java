@@ -1,13 +1,12 @@
 package org.kodigo.project.main;
 
 import org.kodigo.project.controllers.AircraftController;
+import org.kodigo.project.controllers.AirportController;
 import org.kodigo.project.controllers.FlightController;
 import org.kodigo.project.models.Aircraft;
+import org.kodigo.project.models.Airport;
 import org.kodigo.project.models.Flight;
-import org.kodigo.project.persistence.AircraftFileSerializer;
-import org.kodigo.project.persistence.AircraftRepository;
-import org.kodigo.project.persistence.FlightFilseSerializer;
-import org.kodigo.project.persistence.FlightRepository;
+import org.kodigo.project.persistence.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,14 +18,18 @@ public class Principal{
         Scanner scanner = new Scanner(System.in);
         FlightController flightController = new FlightController(new FlightRepository(), new FlightFilseSerializer());
         AircraftController aircraftController = new AircraftController(new AircraftRepository(), new AircraftFileSerializer());
+        AirportController airportController = new AirportController(new AirportRepository(), new AirportFileSerializer());
+
         String menu;
         while (true){
             System.out.println("1) load data");
             System.out.println("2) list flights");
             System.out.println("3) change the status of a flight");
-            System.out.println("4) insert flight by keyboard");
+            System.out.println("4) insert a new flight by keyboard");
             System.out.println("5) list aircraft");
             System.out.println("6) insert aircraft by keyboard");
+            System.out.println("7) list airports");
+            System.out.println("8) insert a new airport");
             System.out.println("exit press (s)");
             String subMenu = scanner.nextLine();
             switch (subMenu){
@@ -110,12 +113,22 @@ public class Principal{
                     scanner.nextLine();
                     break;
                 case "5":
-                    aircraftController.getAircraft();
+                    aircraftController.getAircrafts();
                     System.out.println("\npress enter to return to the menu");
                     scanner.nextLine();
                     break;
                 case "6":
                     aircraftController.saveAircraft(new Aircraft());
+                    System.out.println("Success end!!.");
+                    scanner.nextLine();
+                    break;
+                case "7":
+                    airportController.getAirports();
+                    System.out.println("Success end!!.");
+                    scanner.nextLine();
+                    break;
+                case "8":
+                    airportController.saveAirport(new Airport());
                     System.out.println("Success end!!.");
                     scanner.nextLine();
                     break;
