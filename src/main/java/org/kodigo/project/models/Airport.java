@@ -9,9 +9,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Aircraft {
-    private int nAircraft;
-    private String model;
-    private int passengerCapacity;
-    private int fuelTanksFull;
+public class Airport {
+    private int noAirport;
+    private String airportName;
+    private String country;
+    private String city;
 }
