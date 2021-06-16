@@ -109,4 +109,54 @@ public class AircraftRepository implements IAircraftRepository {
         }
         return aircraftList;
     }
+
+    @Override
+    public Aircraft findByString(String model) throws IOException {
+        String path = "data/Aircrafts.xlsx";
+        FileInputStream file = new FileInputStream(path);
+        Workbook workbook = new XSSFWorkbook(file); //create new workbook
+        DataFormatter formatter = new DataFormatter(); //Formatter values cells
+        Iterator<Sheet> sheets = workbook.sheetIterator();
+        List<Aircraft> aircraftList = new ArrayList<>();
+        while (sheets.hasNext()) {
+            Sheet sh = sheets.next();
+            //System.out.println(sh.getSheetName());
+            Iterator<Row> RowIterator = sh.iterator(); // Iterate the rows on the sheet
+            RowIterator.next();
+            while (RowIterator.hasNext()) {
+                Row row = RowIterator.next(); //Current row
+                Iterator<Cell> cellIterator = row.iterator(); //cells in row
+                int count = 0;
+                while (cellIterator.hasNext()) {
+                    Aircraft newAircraft = new Aircraft();
+
+                    Cell cell = cellIterator.next(); //Current cell
+                    String cellValue = formatter.formatCellValue(cell);
+                    newAircraft.setNAircraft(Integer.parseInt(cellValue));
+
+                    cell = cellIterator.next(); //Current cell
+                    cellValue = formatter.formatCellValue(cell);
+                    newAircraft.setModel(cellValue);
+
+                    cell = cellIterator.next(); //Current cell
+                    cellValue = formatter.formatCellValue(cell);
+                    newAircraft.setPassengerCapacity(Integer.parseInt(cellValue));
+
+                    cell = cellIterator.next(); //Current cell
+                    cellValue = formatter.formatCellValue(cell);
+                    newAircraft.setFuelTanksFull(Integer.parseInt(cellValue));
+
+                    aircraftList.add(newAircraft);
+                }
+            }
+            workbook.close();
+        }
+
+        for (Aircraft a: aircraftList){
+            if (model.equals(a.getModel())){
+                return a;
+            }
+        }
+        return new Aircraft();
+    }
 }

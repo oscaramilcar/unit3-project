@@ -10,4 +10,5 @@ public interface IAircraftRepository {
     void findAll() throws IOException;
     void save(Aircraft aircraft) throws IOException;
     List<Aircraft> findSpecific(int nAircraft) throws IOException;
+    Aircraft findByString(String model) throws IOException;
 }

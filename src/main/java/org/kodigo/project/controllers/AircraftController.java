@@ -26,4 +26,8 @@ public class AircraftController {
     public List<Aircraft> getAircraft(int nAircraft) throws IOException {
         return aircraftRepository.findSpecific(nAircraft);
     }
+
+    public Aircraft getByModel(String model) throws IOException {
+        return aircraftRepository.findByString(model);
+    }
 }
