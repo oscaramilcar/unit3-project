@@ -5,6 +5,8 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -20,16 +22,17 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
 public class FlightReport implements IExportablePdf, IExportableExcel {
-    private final Flight flight;
+    @Getter
+    @Setter
+    private Flight flight;
     @Override
     public void toExcel() {
         try {
             XSSFWorkbook book = new XSSFWorkbook();
             XSSFSheet sheet1 = book.createSheet("flight");
             List<Flight> flightData = new ArrayList<>();
-            flightData.add(flight);
+            flightData.add(getFlight());
 
             //Heading of the document
             String[] header = {"No FLIGHT",	"AIRLINE", "TYPE AIRCRAFT", "SOURCE", "DESTINATION", "DATE","DEPARTURE TIME", "ARRIVAL TIME"};
@@ -98,7 +101,7 @@ public class FlightReport implements IExportablePdf, IExportableExcel {
         //Create the document
         Document document = new Document(PageSize.A3.rotate());
         List<Flight> flightData = new ArrayList<>();
-        flightData.add(flight);
+        flightData.add(getFlight());
         try {
             FileOutputStream pdfFile = new FileOutputStream("FlightReport.pdf");
 

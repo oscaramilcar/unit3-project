@@ -5,6 +5,8 @@ import org.kodigo.project.controllers.AircraftController;
 import org.kodigo.project.controllers.FlightController;
 import org.kodigo.project.models.Aircraft;
 import org.kodigo.project.models.Flight;
+import org.kodigo.project.notifications.EmailSender;
+import org.kodigo.project.notifications.FlightNotifierProcessor;
 import org.kodigo.project.persistence.*;
 
 import java.io.IOException;
@@ -15,6 +17,7 @@ public class Principal{
         Scanner scanner = new Scanner(System.in);
         FlightController flightController = new FlightController(new FlightRepository(), new FlightFilseSerializer());
         AircraftController aircraftController = new AircraftController(new AircraftRepository(), new AircraftFileSerializer());
+        FlightNotifierProcessor flightNotifierProcessor = new FlightNotifierProcessor(new FlightRepository(),new FlightReport(),new EmailSender());
         String menu;
         int numFliht;
         while (true){
@@ -56,10 +59,12 @@ public class Principal{
                     flightController.getFlights();
                     System.out.println("Enter flight number: ");
                     numFliht = Integer.parseInt(scanner.nextLine());
-                    Flight flightSelected = flightController.getFlight(numFliht);
-                    FlightReport report = new FlightReport(flightSelected);
-                    report.toExcel();
-                    report.toPdf();
+                    flightNotifierProcessor.sendReportsByFlightProcessor(numFliht);
+                    //Flight flightSelected = flightController.getFlight(numFliht);
+                    //FlightReport report = new FlightReport(flightSelected);
+                    //report.toExcel();
+                    //report.toPdf();
+                    //emailSender.notify("FlightReport.pdf","FlightReport.xlsx");
                     System.out.println("\npress enter to return to the menu");
                     scanner.nextLine();
                     break;
