@@ -1,15 +1,18 @@
 package org.kodigo.project.main;
 
+import org.kodigo.project.ApiPublic.WeatherState;
+import org.kodigo.project.Documents.FlightReport;
 import org.kodigo.project.controllers.AircraftController;
 import org.kodigo.project.controllers.AirportController;
 import org.kodigo.project.controllers.FlightController;
 import org.kodigo.project.models.Aircraft;
 import org.kodigo.project.models.Airport;
 import org.kodigo.project.models.Flight;
+import org.kodigo.project.notifications.EmailSender;
+import org.kodigo.project.notifications.FlightNotifierProcessor;
 import org.kodigo.project.persistence.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,7 +22,7 @@ public class Principal{
         FlightController flightController = new FlightController(new FlightRepository(), new FlightFilseSerializer());
         AircraftController aircraftController = new AircraftController(new AircraftRepository(), new AircraftFileSerializer());
         AirportController airportController = new AirportController(new AirportRepository(), new AirportFileSerializer());
-
+        FlightNotifierProcessor flightNotifierProcessor = new FlightNotifierProcessor(new FlightRepository(),new FlightReport(new AircraftRepository(), new WeatherState()),new EmailSender());
         String menu;
         while (true){
             System.out.println("1) load data");
@@ -30,6 +33,7 @@ public class Principal{
             System.out.println("6) insert aircraft by keyboard");
             System.out.println("7) list airports");
             System.out.println("8) insert a new airport");
+            System.out.println("9) send report by email");
             System.out.println("exit press (s)");
             String subMenu = scanner.nextLine();
             switch (subMenu){
@@ -130,6 +134,13 @@ public class Principal{
                 case "8":
                     airportController.saveAirport(new Airport());
                     System.out.println("Success end!!.");
+                    scanner.nextLine();
+                    break;
+                case "9":
+                    flightController.getFlights();
+                    System.out.println("Enter flight number: ");
+                    flightNotifierProcessor.sendReportsByFlightProcessor(Integer.parseInt(scanner.nextLine()));
+                    System.out.println("\npress enter to return to the menu");
                     scanner.nextLine();
                     break;
                 case "s":

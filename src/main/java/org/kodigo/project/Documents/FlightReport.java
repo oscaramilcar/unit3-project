@@ -13,7 +13,10 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.kodigo.project.ApiPublic.WeatherState;
 import org.kodigo.project.models.Flight;
+import org.kodigo.project.persistence.AircraftRepository;
+import org.kodigo.project.persistence.IAircraftRepository;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -25,17 +28,24 @@ import java.util.List;
 public class FlightReport implements IExportablePdf, IExportableExcel {
     @Getter
     @Setter
-    private Flight flight;
+    private List<Flight> flight;
+    private final IAircraftRepository aircraftRepository;
+    private final WeatherState weatherState;
+    public FlightReport(IAircraftRepository aircraftRepository, WeatherState weatherState){
+        this.aircraftRepository = aircraftRepository;
+        this.weatherState = weatherState;
+    }
+
     @Override
     public void toExcel() {
         try {
             XSSFWorkbook book = new XSSFWorkbook();
             XSSFSheet sheet1 = book.createSheet("flight");
             List<Flight> flightData = new ArrayList<>();
-            flightData.add(getFlight());
+            flightData.add(getFlight().get(0));
 
             //Heading of the document
-            String[] header = {"No FLIGHT",	"AIRLINE", "TYPE AIRCRAFT", "SOURCE", "DESTINATION", "DATE","DEPARTURE TIME", "ARRIVAL TIME"};
+            String[] header = {"No FLIGHT",	"AIRLINE", "TYPE AIRCRAFT", "SOURCE", "DESTINATION", "DATE","DEPARTURE TIME", "ARRIVAL TIME","WEATHER CONDITION"};
 
             //Adding style to the excel sheet
             CellStyle style = book.createCellStyle();
@@ -81,6 +91,9 @@ public class FlightReport implements IExportablePdf, IExportableExcel {
 
                 cell = row.createCell(7);
                 cell.setCellValue(data.getArrivalTime());
+
+                cell = row.createCell(8);
+                cell.setCellValue(weatherState.GetweatherStatus(data.getDestination()));
             }
 
             try{
@@ -97,11 +110,11 @@ public class FlightReport implements IExportablePdf, IExportableExcel {
 
     @Override
     public String toPdf() {
-        String[] header = {"No FLIGHT",	"AIRLINE", "TYPE AIRCRAFT", "SOURCE", "DESTINATION", "DATE","DEPARTURE TIME", "ARRIVAL TIME"};
+        String[] header = {"No FLIGHT",	"AIRLINE", "TYPE AIRCRAFT", "SOURCE", "DESTINATION", "DATE","DEPARTURE TIME", "ARRIVAL TIME","WEATHER CONDITION"};
         //Create the document
         Document document = new Document(PageSize.A3.rotate());
         List<Flight> flightData = new ArrayList<>();
-        flightData.add(getFlight());
+        flightData.add(getFlight().get(0));
         try {
             FileOutputStream pdfFile = new FileOutputStream("FlightReport.pdf");
 
@@ -120,7 +133,7 @@ public class FlightReport implements IExportablePdf, IExportableExcel {
             document.add(title);
 
             //Creating a table for showing data
-            PdfPTable table = new PdfPTable(7);
+            PdfPTable table = new PdfPTable(8);
             table.setWidthPercentage(100);
             table.getDefaultCell().setUseAscender(true);
             table.getDefaultCell().setUseDescender(true);
@@ -141,6 +154,7 @@ public class FlightReport implements IExportablePdf, IExportableExcel {
                 table.addCell(data.getDate());
                 table.addCell(data.getDepartureTime());
                 table.addCell(data.getArrivalTime());
+                table.addCell(weatherState.GetweatherStatus(data.getDestination()));
             }
 
             //Add the table to the document
@@ -152,6 +166,8 @@ public class FlightReport implements IExportablePdf, IExportableExcel {
 
         }catch (FileNotFoundException | DocumentException ex){
             System.out.println("An error has occurred");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return "FlightReport.pdf";
     }

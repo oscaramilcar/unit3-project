@@ -26,9 +26,4 @@ public class AircraftController {
     public List<Aircraft> getAircraft(int nAircraft) throws IOException {
         return aircraftRepository.findSpecific(nAircraft);
     }
-
-    //It is never used
-    public void importData(){
-
-    }
 }
